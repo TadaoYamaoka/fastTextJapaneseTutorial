@@ -1,7 +1,7 @@
 import os
 import argparse
 import xml.etree.ElementTree as ET
-
+import re
 
 MAKE_CORPUS_PATH = lambda f: os.path.join(os.path.dirname(__file__), "./corpus/" + f)
 
@@ -21,11 +21,9 @@ def extract(file_path):
             continue
         elif abs.startswith(("|", "thumb", "{", "・", ")", "(", "link")):
             continue
-        title = doc.find("./title").text.replace("Wikipedia: ", "")
+        abs = re.sub('\W*[（\(].*?[）\)]\W*', '', abs)
 
-        if abs and title:
-            stream.write(title + "\n")
-            stream.write(abs + "\n")
+        stream.write(abs + "\n")
     
     stream.close()
 
